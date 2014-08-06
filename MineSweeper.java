@@ -8,6 +8,7 @@ import javax.swing.*;
  * This implementation is based on the MVC design pattern.
  * 
  * TODO: implement a counter showing how many seconds have elapsed since the start of the game
+ * TODO: make the background color of numbered tiles change to light gray when they are clicked
  * TODO: maybe implement little pictures for the mines and flags - not just red and blue
  * 
  * @author Benjamin Revard
