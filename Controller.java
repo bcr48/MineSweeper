@@ -76,14 +76,14 @@ public class Controller implements MouseListener {
 				zeroClicked(col, row);
 			}
 			if (hasWon()) {
-				model.victory();
+				view.victory();
 			}
 		}
 		else if (!rightClicked && !leftClicked && isRightClick) {
 			model.getCells()[col][row].setRightClicked(true);
 			view.placeFlag(col, row);
 			if (hasWon()) {
-				model.victory();
+				view.victory();
 			}  
 		}
 		else if (rightClicked && isRightClick) { 
@@ -94,7 +94,7 @@ public class Controller implements MouseListener {
 			if (correctFlags(col, row)) {
 				zeroClicked(col, row);
 				if (hasWon()) {
-					model.victory();
+					view.victory();
 				}
 			}
 			else {
