@@ -7,10 +7,8 @@ import javax.swing.*;
  * 
  * This implementation is based on the MVC design pattern.
  * 
- * TODO: implement some indication of when the user has won the game (i.e., has flagged all the mine buttons 
- * and none of the non-mine buttons)
- * TODO: implement little pictures for the mines and flags - not just red and blue
- * TODO: implement counter displaying (numMines - numFlags)
+ * TODO: implement a counter showing how many seconds have elapsed since the start of the game
+ * TODO: maybe implement little pictures for the mines and flags - not just red and blue
  * 
  * @author Benjamin Revard
  */

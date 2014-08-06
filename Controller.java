@@ -76,25 +76,29 @@ public class Controller implements MouseListener {
 				zeroClicked(col, row);
 			}
 			if (hasWon()) {
-				view.victory();
+				view.showVictoryMsg();
 			}
 		}
 		else if (!rightClicked && !leftClicked && isRightClick) {
 			model.getCells()[col][row].setRightClicked(true);
+			model.incrementFlags(1);
 			view.placeFlag(col, row);
+			view.setCounter(model.getMines() - model.getFlags());
 			if (hasWon()) {
-				view.victory();
+				view.showVictoryMsg();
 			}  
 		}
 		else if (rightClicked && isRightClick) { 
 			model.getCells()[col][row].setRightClicked(false);
+			model.incrementFlags(-1);
 			view.setDefaultBackground(col, row);
+			view.setCounter(model.getMines() - model.getFlags());
 		}
 		else if (leftClicked && isDoubleClick && numFlagNeighbors == val) {
 			if (correctFlags(col, row)) {
 				zeroClicked(col, row);
 				if (hasWon()) {
-					view.victory();
+					view.showVictoryMsg();
 				}
 			}
 			else {

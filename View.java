@@ -13,7 +13,6 @@ public class View extends JFrame {
 	
 	private int length; // The length of one side of the mine field (> 0)
 	private int mines; // The number of mines in the mine field (> 0)
-	private int flags; // The number of flags placed by the player
 	private JPanel topPanel; // JPanel to hold the reset button
 	private JLabel mineCounter; // Display to hold the number of mines minus the number of flags 
 	private JLabel timer; // Display to show how long the game has lasted
@@ -27,8 +26,8 @@ public class View extends JFrame {
 		super("Mine Sweeper");
 		this.length = length;
 		this.mines = mines;
-		flags = 0;
 		mineCounter = new JLabel(Integer.toString(mines));
+		timer = new JLabel("timer");
 				
 		// Create the panel to hold the mine counter, the reset button, and the timer
 		topPanel = new JPanel();
@@ -36,7 +35,7 @@ public class View extends JFrame {
 		topPanel.setLayout(new GridLayout(1, 3, 0, 0));
 		topPanel.add(mineCounter);
 		topPanel.add(new JButton("Reset"));
-		topPanel.add(new JLabel("0"));
+		topPanel.add(timer);
 		
 		// Create all the mine field buttons
 		buttonsPanel = new JPanel();
@@ -73,8 +72,8 @@ public class View extends JFrame {
 	}
 	
 	/**
-	 * Sets this button's background color to the default.
-	 * Input: the column and row of the button
+	 * Sets this button's background color to the default, and adjusts the flag count by the amount indicated
+	 * Input: the column and row of the button, and the amount to increment the flag count
 	 */
 	public void setDefaultBackground(int col, int row) {
 		buttons[col][row].setBackground(null);
@@ -135,8 +134,15 @@ public class View extends JFrame {
 	 */
 	public void placeFlag(int col, int row) {
 		paintTile(col, row, Color.BLUE);
-		flags++;
-		mineCounter.setText(Integer.toString(mines - flags));
+	}
+	
+	/**
+	 * Sets the value of the counter, which should be showing (number of mines) - (the number of flags)
+	 * Input: the number to set the counter to
+	 * @param incr
+	 */
+	public void setCounter(int counter) {
+		mineCounter.setText(Integer.toString(counter));
 	}
 	
 	/**
@@ -152,25 +158,22 @@ public class View extends JFrame {
 	/**
 	 * Sets all the buttons in the mine field to the default background color and empty text. 
 	 * Sets the mine counter label to the total number of mines and sets flags to zero.
-	 * TODO: maybe there's a better way to do this. If we could somehow just call the constructor again,
-	 * I think that would take care of everything.
 	 */
 	public void reset() {
-		flags = 0;
 		mineCounter.setText(Integer.toString(mines));
 		for (int i = 0; i < length; i++) {
 			for (int j = 0; j < length; j++) {
 				buttons[j][i].setText("");
 				setDefaultBackground(j, i);
 			}
-		}
+		}	
 	}
 	
 	/**
-	 * Performs action if the player has won the game
+	 * Paints all the tiles black to indicate the player has won. Prints a victory message is there's room.
 	 * @return
 	 */
-	public void victory() {
+	public void showVictoryMsg() {
 		// paint all the cells black
 		for (int i = 0; i < length; i++) {
 			for (int j = 0; j < length; j++) {
@@ -179,103 +182,104 @@ public class View extends JFrame {
 			}
 		}
 		// paint a victory message
-		// TODO: should probably put all these coordinates into a data structure and read them from there
-		// the Y
-		paintTile(2, 4, Color.GREEN);
-		paintTile(1, 2, Color.GREEN);
-		paintTile(1, 3, Color.GREEN);
-		paintTile(4, 4, Color.GREEN);
-		paintTile(5, 2, Color.GREEN);
-		paintTile(5, 3, Color.GREEN);
-		paintTile(3, 5, Color.GREEN);
-		paintTile(3, 6, Color.GREEN);
-		paintTile(3, 7, Color.GREEN);
+		if (length > 18) {
+			// the Y
+			paintTile(2, 4, Color.GREEN);
+			paintTile(1, 2, Color.GREEN);
+			paintTile(1, 3, Color.GREEN);
+			paintTile(4, 4, Color.GREEN);
+			paintTile(5, 2, Color.GREEN);
+			paintTile(5, 3, Color.GREEN);
+			paintTile(3, 5, Color.GREEN);
+			paintTile(3, 6, Color.GREEN);
+			paintTile(3, 7, Color.GREEN);
 
-		// the O
-		paintTile(7, 3, Color.GREEN);
-		paintTile(7, 4, Color.GREEN);
-		paintTile(7, 5, Color.GREEN);
-		paintTile(7, 6, Color.GREEN);
-		paintTile(11, 3, Color.GREEN);
-		paintTile(11, 4, Color.GREEN);
-		paintTile(11, 5, Color.GREEN);
-		paintTile(11, 6, Color.GREEN);
-		paintTile(8, 2, Color.GREEN);
-		paintTile(9, 2, Color.GREEN);
-		paintTile(10, 2, Color.GREEN);
-		paintTile(8, 7, Color.GREEN);
-		paintTile(9, 7, Color.GREEN);
-		paintTile(10, 7, Color.GREEN);
+			// the O
+			paintTile(7, 3, Color.GREEN);
+			paintTile(7, 4, Color.GREEN);
+			paintTile(7, 5, Color.GREEN);
+			paintTile(7, 6, Color.GREEN);
+			paintTile(11, 3, Color.GREEN);
+			paintTile(11, 4, Color.GREEN);
+			paintTile(11, 5, Color.GREEN);
+			paintTile(11, 6, Color.GREEN);
+			paintTile(8, 2, Color.GREEN);
+			paintTile(9, 2, Color.GREEN);
+			paintTile(10, 2, Color.GREEN);
+			paintTile(8, 7, Color.GREEN);
+			paintTile(9, 7, Color.GREEN);
+			paintTile(10, 7, Color.GREEN);
 		
-		// the U
-		paintTile(13, 2, Color.GREEN);
-		paintTile(13, 3, Color.GREEN);
-		paintTile(13, 4, Color.GREEN);
-		paintTile(13, 5, Color.GREEN);
-		paintTile(13, 6, Color.GREEN);
-		paintTile(14, 7, Color.GREEN);
-		paintTile(15, 7, Color.GREEN);
-		paintTile(16, 7, Color.GREEN);
-		paintTile(17, 6, Color.GREEN);
-		paintTile(17, 5, Color.GREEN);
-		paintTile(17, 4, Color.GREEN);
-		paintTile(17, 3, Color.GREEN);
-		paintTile(17, 2, Color.GREEN);
+			// the U
+			paintTile(13, 2, Color.GREEN);
+			paintTile(13, 3, Color.GREEN);
+			paintTile(13, 4, Color.GREEN);
+			paintTile(13, 5, Color.GREEN);
+			paintTile(13, 6, Color.GREEN);
+			paintTile(14, 7, Color.GREEN);
+			paintTile(15, 7, Color.GREEN);
+			paintTile(16, 7, Color.GREEN);
+			paintTile(17, 6, Color.GREEN);
+			paintTile(17, 5, Color.GREEN);
+			paintTile(17, 4, Color.GREEN);
+			paintTile(17, 3, Color.GREEN);
+			paintTile(17, 2, Color.GREEN);
 		
-		// the W
-		paintTile(1, 12, Color.GREEN);
-		paintTile(1, 13, Color.GREEN);
-		paintTile(1, 14, Color.GREEN);
-		paintTile(1, 15, Color.GREEN);
-		paintTile(1, 16, Color.GREEN);
-		paintTile(2, 17, Color.GREEN);
-		paintTile(3, 16, Color.GREEN);
-		paintTile(4, 17, Color.GREEN);
-		paintTile(5, 16, Color.GREEN);
-		paintTile(5, 15, Color.GREEN);
-		paintTile(5, 14, Color.GREEN);
-		paintTile(5, 13, Color.GREEN);
-		paintTile(5, 12, Color.GREEN);
+			// the W
+			paintTile(1, 11, Color.GREEN);
+			paintTile(1, 12, Color.GREEN);
+			paintTile(1, 13, Color.GREEN);
+			paintTile(1, 14, Color.GREEN);
+			paintTile(1, 15, Color.GREEN);
+			paintTile(2, 16, Color.GREEN);
+			paintTile(3, 15, Color.GREEN);
+			paintTile(4, 16, Color.GREEN);
+			paintTile(5, 15, Color.GREEN);
+			paintTile(5, 14, Color.GREEN);
+			paintTile(5, 13, Color.GREEN);
+			paintTile(5, 12, Color.GREEN);
+			paintTile(5, 11, Color.GREEN);
 		
-		// the second O
-		paintTile(7, 13, Color.GREEN);
-		paintTile(7, 14, Color.GREEN);
-		paintTile(7, 15, Color.GREEN);
-		paintTile(7, 16, Color.GREEN);
-		paintTile(11, 13, Color.GREEN);
-		paintTile(11, 14, Color.GREEN);
-		paintTile(11, 15, Color.GREEN);
-		paintTile(11, 16, Color.GREEN);
-		paintTile(8, 12, Color.GREEN);
-		paintTile(9, 12, Color.GREEN);
-		paintTile(10, 12, Color.GREEN);
-		paintTile(8, 17, Color.GREEN);
-		paintTile(9, 17, Color.GREEN);
-		paintTile(10, 17, Color.GREEN);
+			// the second O
+			paintTile(7, 12, Color.GREEN);
+			paintTile(7, 13, Color.GREEN);
+			paintTile(7, 14, Color.GREEN);
+			paintTile(7, 15, Color.GREEN);
+			paintTile(11, 12, Color.GREEN);
+			paintTile(11, 13, Color.GREEN);
+			paintTile(11, 14, Color.GREEN);
+			paintTile(11, 15, Color.GREEN);
+			paintTile(8, 11, Color.GREEN);
+			paintTile(9, 11, Color.GREEN);
+			paintTile(10, 11, Color.GREEN);
+			paintTile(8, 16, Color.GREEN);
+			paintTile(9, 16, Color.GREEN);
+			paintTile(10, 16, Color.GREEN);
 
-		// the N
-		paintTile(13, 12, Color.GREEN);
-		paintTile(13, 13, Color.GREEN);
-		paintTile(13, 14, Color.GREEN);
-		paintTile(13, 15, Color.GREEN);
-		paintTile(13, 16, Color.GREEN);
-		paintTile(13, 17, Color.GREEN);
-		paintTile(17, 12, Color.GREEN);
-		paintTile(17, 13, Color.GREEN);
-		paintTile(17, 14, Color.GREEN);
-		paintTile(17, 15, Color.GREEN);
-		paintTile(17, 16, Color.GREEN);
-		paintTile(17, 17, Color.GREEN);
-		paintTile(14, 13, Color.GREEN);
-		paintTile(15, 14, Color.GREEN);
-		paintTile(15, 15, Color.GREEN);
-		paintTile(16, 16, Color.GREEN);
+			// the N
+			paintTile(13, 11, Color.GREEN);
+			paintTile(13, 12, Color.GREEN);
+			paintTile(13, 13, Color.GREEN);
+			paintTile(13, 14, Color.GREEN);
+			paintTile(13, 15, Color.GREEN);
+			paintTile(13, 16, Color.GREEN);
+			paintTile(17, 11, Color.GREEN);
+			paintTile(17, 12, Color.GREEN);
+			paintTile(17, 13, Color.GREEN);
+			paintTile(17, 14, Color.GREEN);
+			paintTile(17, 15, Color.GREEN);
+			paintTile(17, 16, Color.GREEN);
+			paintTile(14, 12, Color.GREEN);
+			paintTile(15, 13, Color.GREEN);
+			paintTile(15, 14, Color.GREEN);
+			paintTile(16, 15, Color.GREEN);
+		}
 	}
 	
 	/**
-	 * Paints a tile a a color
-	 * Input: row and column of tile to paint, and the color to paint it. The input color should have the
-	 * format Color.GREEN, for example
+	 * Paints a tile
+	 * Input: column and row of the tile to paint, and the color to paint it. The input color should have 
+	 * the format Color.GREEN, for example
 	 */
 	public void paintTile(int col, int row, Color color) {
 		buttons[col][row].setBackground(color);
