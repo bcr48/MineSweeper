@@ -75,10 +75,16 @@ public class Controller implements MouseListener {
 			if (val == 0) { 
 				zeroClicked(col, row);
 			}
+			if (hasWon()) {
+				model.victory();
+			}
 		}
 		else if (!rightClicked && !leftClicked && isRightClick) {
 			model.getCells()[col][row].setRightClicked(true);
 			view.placeFlag(col, row);
+			if (hasWon()) {
+				model.victory();
+			}  
 		}
 		else if (rightClicked && isRightClick) { 
 			model.getCells()[col][row].setRightClicked(false);
@@ -87,6 +93,9 @@ public class Controller implements MouseListener {
 		else if (leftClicked && isDoubleClick && numFlagNeighbors == val) {
 			if (correctFlags(col, row)) {
 				zeroClicked(col, row);
+				if (hasWon()) {
+					model.victory();
+				}
 			}
 			else {
 				mineClicked();
@@ -207,6 +216,22 @@ public class Controller implements MouseListener {
 		int mines = model.getMines();
 		model = new Model(length, mines);
 		view.reset();
+	}
+	
+	/**
+	 * Checks if the player has won the game.
+	 */
+	private boolean hasWon() {
+		int length = model.getLength();
+		for (int i = 0; i < length; i++) {
+			for (int j = 0; j < length; j++) {
+				Cell cell = model.getCells()[i][j];
+				if ( !( (cell.getIsMine() && cell.getRightClicked()) || (!cell.getIsMine() && cell.getLeftClicked()) ) ) {
+					return false;
+				}
+			}
+		}
+		return true;
 	}
 	
 	// Methods from interface MouseListener that must be implemented

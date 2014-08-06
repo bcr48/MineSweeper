@@ -13,8 +13,9 @@ public class View extends JFrame {
 	
 	private int length; // The length of one side of the mine field (> 0)
 	private int mines; // The number of mines in the mine field (> 0)
+	private int flags; // The number of flags placed by the player
 	private JPanel topPanel; // JPanel to hold the reset button
-	private JLabel mineCounter; // Display to hold the number of mines left 
+	private JLabel mineCounter; // Display to hold the number of mines minus the number of flags 
 	private JLabel timer; // Display to show how long the game has lasted
 	private JPanel buttonsPanel;  // JPanel to hold all the buttons
 	private JButton[][] buttons; // 2D array to hold all the mine field buttons
@@ -26,12 +27,14 @@ public class View extends JFrame {
 		super("Mine Sweeper");
 		this.length = length;
 		this.mines = mines;
+		flags = 0;
+		mineCounter = new JLabel(Integer.toString(mines));
 				
 		// Create the panel to hold the mine counter, the reset button, and the timer
 		topPanel = new JPanel();
 		add(topPanel, BorderLayout.NORTH);
 		topPanel.setLayout(new GridLayout(1, 3, 0, 0));
-		topPanel.add(new JLabel(Integer.toString(mines)));
+		topPanel.add(mineCounter);
 		topPanel.add(new JButton("Reset"));
 		topPanel.add(new JLabel("0"));
 		
@@ -135,6 +138,8 @@ public class View extends JFrame {
 		buttons[col][row].setOpaque(true);
 		buttons[col][row].setBorderPainted(false);
 		this.setVisible(true);
+		flags++;
+		mineCounter.setText(Integer.toString(mines - flags));
 	}
 	
 	/**
@@ -152,8 +157,13 @@ public class View extends JFrame {
 	
 	/**
 	 * Sets all the buttons in the mine field to the default background color and empty text. 
+	 * Sets the mine counter label to the total number of mines and sets flags to zero.
+	 * TODO: maybe there's a better way to do this. If we could somehow just call the constructor again,
+	 * I think that would take care of everything.
 	 */
 	public void reset() {
+		flags = 0;
+		mineCounter.setText(Integer.toString(mines));
 		for (int i = 0; i < length; i++) {
 			for (int j = 0; j < length; j++) {
 				buttons[j][i].setText("");
