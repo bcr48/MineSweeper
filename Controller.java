@@ -17,13 +17,15 @@ public class Controller implements MouseListener {
 	
 	private Model model; // The model of this MVC implementation of mine sweeper
 	private View view; // The view of this MVC implementation of mine sweeper
+	private Timer timer;
 	
 	/**
 	 * Constructor
 	 */
-	public Controller(Model model, View view) {
+	public Controller(Model model, View view, Timer timer) {
 		this.model = model;
 		this.view = view;
+		this.timer = timer;
 	}
 	
 	/**
@@ -68,6 +70,7 @@ public class Controller implements MouseListener {
 		// Take the appropriate action
 		if (isMine && isLeftClick && !rightClicked) {
 			mineClicked();
+			timer.setGameStopped(true);
 		}
 		else if (!leftClicked && !rightClicked && isLeftClick) {
 			model.getCells()[col][row].setLeftClicked(true);
@@ -75,8 +78,9 @@ public class Controller implements MouseListener {
 			if (val == 0) { 
 				zeroClicked(col, row);
 			}
-			if (hasWon()) {
+			if (model.hasWon()) {
 				view.showVictoryMsg();
+				timer.setGameStopped(true);
 			}
 		}
 		else if (!rightClicked && !leftClicked && isRightClick) {
@@ -84,8 +88,9 @@ public class Controller implements MouseListener {
 			model.incrementFlags(1);
 			view.placeFlag(col, row);
 			view.setCounter(model.getMines() - model.getFlags());
-			if (hasWon()) {
+			if (model.hasWon()) {
 				view.showVictoryMsg();
+				timer.setGameStopped(true);
 			}  
 		}
 		else if (rightClicked && isRightClick) { 
@@ -97,8 +102,9 @@ public class Controller implements MouseListener {
 		else if (leftClicked && isDoubleClick && numFlagNeighbors == val) {
 			if (correctFlags(col, row)) {
 				zeroClicked(col, row);
-				if (hasWon()) {
+				if (model.hasWon()) {
 					view.showVictoryMsg();
+					timer.setGameStopped(true);
 				}
 			}
 			else {
@@ -172,7 +178,6 @@ public class Controller implements MouseListener {
 	 * Shows all the buttons.
 	 */
 	private void mineClicked() {
-		
 		for (int i = 0; i < model.getLength(); i++) {
 			for (int j = 0; j < model.getLength(); j++) {
 				Cell cell = model.getCells()[j][i];
@@ -213,29 +218,17 @@ public class Controller implements MouseListener {
 	
 	/**
 	 * Resets the game by generating new model and setting all the mine field buttons to the
-	 * default background color and empty text.
+	 * default background color and empty text. Also restarts the timer
 	 */
 	private void resetClicked() {
 		int length = model.getLength();
 		int mines = model.getMines();
 		model = new Model(length, mines);
 		view.reset();
-	}
-	
-	/**
-	 * Checks if the player has won the game.
-	 */
-	private boolean hasWon() {
-		int length = model.getLength();
-		for (int i = 0; i < length; i++) {
-			for (int j = 0; j < length; j++) {
-				Cell cell = model.getCells()[i][j];
-				if ( !( (cell.getIsMine() && cell.getRightClicked()) || (!cell.getIsMine() && cell.getLeftClicked()) ) ) {
-					return false;
-				}
-			}
-		}
-		return true;
+		// The lines below don't work right.
+	//	timer.setGameStopped(true);
+	//	timer = new Timer(model, view);
+	//	timer.run();
 	}
 	
 	// Methods from interface MouseListener that must be implemented

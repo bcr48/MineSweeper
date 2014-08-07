@@ -27,7 +27,9 @@ public class MineSweeper {
 		// initialize the model, view and controller
 		Model model = new Model(length, mines);
 		View view = new View(length, mines);
-		Controller controller = new Controller(model, view);
+		Timer timer = new Timer(model, view);
+		Controller controller = new Controller(model, view, timer);
+
 		
 		// register the controller as a listener
 		view.registerListener(controller);
@@ -36,6 +38,7 @@ public class MineSweeper {
 		view.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		view.setSize(500, 500);
 		view.setVisible(true);
+		timer.run();
 	}
 	
 }

@@ -26,16 +26,16 @@ public class View extends JFrame {
 		super("Mine Sweeper");
 		this.length = length;
 		this.mines = mines;
-		mineCounter = new JLabel(Integer.toString(mines));
-		timer = new JLabel("timer");
+		mineCounter = new JLabel("  " + Integer.toString(mines) + "  ");
+		timer = new JLabel("  0  ");
 				
 		// Create the panel to hold the mine counter, the reset button, and the timer
 		topPanel = new JPanel();
 		add(topPanel, BorderLayout.NORTH);
-		topPanel.setLayout(new GridLayout(1, 3, 0, 0));
-		topPanel.add(mineCounter);
-		topPanel.add(new JButton("Reset"));
-		topPanel.add(timer);
+		topPanel.setLayout(new BorderLayout(150, 1));
+		topPanel.add(mineCounter, BorderLayout.LINE_START);
+		topPanel.add(new JButton("Reset"), BorderLayout.CENTER);
+		topPanel.add(timer, BorderLayout.LINE_END);
 		
 		// Create all the mine field buttons
 		buttonsPanel = new JPanel();
@@ -142,7 +142,11 @@ public class View extends JFrame {
 	 * @param incr
 	 */
 	public void setCounter(int counter) {
-		mineCounter.setText(Integer.toString(counter));
+		mineCounter.setText("  " + Integer.toString(counter) + "  ");
+	}
+	
+	public void setTimer(int time) {
+		timer.setText("  " + time + "  ");
 	}
 	
 	/**
@@ -160,13 +164,13 @@ public class View extends JFrame {
 	 * sets the mine counter label to the total number of mines.
 	 */
 	public void reset() {
-		mineCounter.setText(Integer.toString(mines));
+		mineCounter.setText("  " + Integer.toString(mines) + "  ");
 		for (int i = 0; i < length; i++) {
 			for (int j = 0; j < length; j++) {
 				buttons[j][i].setText("");
 				setDefaultBackground(j, i);
 			}
-		}	
+		}
 	}
 	
 	/**
