@@ -20,7 +20,8 @@ public class View extends JFrame {
 	private JButton[][] buttons; // 2D array to hold all the mine field buttons
 	
 	/**
-	 * Creates the panels and buttons for the JFrame.
+	 * Constructor: creates the panels and buttons for the JFrame.
+	 * Input: the length of one side of the mine field, and the number of mines
 	 */
 	public View(int length, int mines) {
 		super("Mine Sweeper");
@@ -58,10 +59,12 @@ public class View extends JFrame {
 	 */
 	public void registerListener(Controller controller) {
 		
+		// register listener to the reset button
 		Component reset = topPanel.getComponent(1); 
 		AbstractButton resetButton = (AbstractButton) reset;
 		resetButton.addMouseListener(controller);
 		
+		// register listener to the mine field buttons
 		Component[] components = buttonsPanel.getComponents();
 		for (Component component : components) {
             if (component instanceof AbstractButton) {
@@ -72,8 +75,8 @@ public class View extends JFrame {
 	}
 	
 	/**
-	 * Sets this button's background color to the default
-	 * Input: the column and row of the button, and the amount to increment the flag count
+	 * Sets this button's background color to the default.
+	 * Input: the column and row of the button
 	 */
 	public void setDefaultBackground(int col, int row) {
 		buttons[col][row].setBackground(null);
@@ -139,7 +142,6 @@ public class View extends JFrame {
 	/**
 	 * Sets the value of the counter, which should be showing (number of mines) - (the number of flags).
 	 * Input: the number to set the counter to
-	 * @param incr
 	 */
 	public void setCounter(int counter) {
 		mineCounter.setText("  " + Integer.toString(counter) + "  ");
@@ -178,6 +180,7 @@ public class View extends JFrame {
 	 * @return
 	 */
 	public void showVictoryMsg() {
+		
 		// paint all the cells black
 		for (int i = 0; i < length; i++) {
 			for (int j = 0; j < length; j++) {
@@ -185,6 +188,7 @@ public class View extends JFrame {
 				paint(i, j, Color.BLACK);
 			}
 		}
+		
 		// paint a victory message
 		// TODO: find a better way to do this
 		if (length > 18) {
@@ -282,9 +286,8 @@ public class View extends JFrame {
 	}
 	
 	/**
-	 * Paints a minefield button
-	 * Input: column and row of the tile to paint, and the color to paint it. The input color should have 
-	 * the format Color.GREEN, for example
+	 * Paints a mine field button.
+	 * Input: column and row of the button to paint, and the color to paint it
 	 */
 	private void paint(int col, int row, Color color) {
 		buttons[col][row].setBackground(color);

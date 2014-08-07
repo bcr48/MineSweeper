@@ -3,13 +3,13 @@ package minesweeper;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
-
 import javax.swing.*;
+import java.util.Timer;
 
 /**
  * This is the controller of the MVC implementation of the mine sweeper game.
- * It interprets events from the GUI and updates instances of MineSweeperModel 
- * and MineSweeperView as needed.
+ * It interprets events from the GUI and updates instances of MineSweeperModel,
+ *  MineSweeperView and Task as needed.
  * 
  * @author Benjamin Revard
  */
@@ -17,15 +17,19 @@ public class Controller implements MouseListener {
 	
 	private Model model; // The model of this MVC implementation of mine sweeper
 	private View view; // The view of this MVC implementation of mine sweeper
-	private Timer timer;
+	private Timer timer; // Timer object from java.util.Timer
+	private Task task; // The task for the timer
 	
 	/**
-	 * Constructor
+	 * Constructor: initializes new timer and task objects, and starts the timer.
+	 * Input: a model and a view
 	 */
-	public Controller(Model model, View view, Timer timer) {
+	public Controller(Model model, View view) {
 		this.model = model;
 		this.view = view;
-		this.timer = timer;
+		task = new Task(view); 
+		timer = new Timer();
+		timer.scheduleAtFixedRate(task, 0, 1000); 
 	}
 	
 	/**
@@ -45,6 +49,29 @@ public class Controller implements MouseListener {
 		else {
 			fieldClicked(e, btn);
 		}	
+	}
+	
+	/**
+	 * Resets the game by stopping the timer if needed, generating a new model, setting all the mine 
+	 * field buttons to the default background color and empty text, and making and starting a new timer.
+	 */
+	private void resetClicked() {
+		
+		// stop the timer if needed
+		if (!model.hasWon() && !model.hasLost()) {
+			timer.cancel();
+		}
+		
+		// reset the model and view
+		int length = model.getLength();
+		int mines = model.getMines();
+		model = new Model(length, mines);
+		view.reset();
+		
+		// make and start a new timer
+		timer = new Timer();
+		task = new Task(view);
+		timer.scheduleAtFixedRate(task, 0, 1000);
 	}
 	
 	/**
@@ -70,7 +97,6 @@ public class Controller implements MouseListener {
 		// Take the appropriate action
 		if (isMine && isLeftClick && !rightClicked) {
 			mineClicked();
-			timer.setGameStopped(true);
 		}
 		else if (!leftClicked && !rightClicked && isLeftClick) {
 			model.getCells()[col][row].setLeftClicked(true);
@@ -79,8 +105,8 @@ public class Controller implements MouseListener {
 				zeroClicked(col, row);
 			}
 			if (model.hasWon()) {
+				timer.cancel();
 				view.showVictoryMsg();
-				timer.setGameStopped(true);
 			}
 		}
 		else if (!rightClicked && !leftClicked && isRightClick) {
@@ -89,8 +115,8 @@ public class Controller implements MouseListener {
 			view.placeFlag(col, row);
 			view.setCounter(model.getMines() - model.getFlags());
 			if (model.hasWon()) {
+				timer.cancel();
 				view.showVictoryMsg();
-				timer.setGameStopped(true);
 			}  
 		}
 		else if (rightClicked && isRightClick) { 
@@ -103,8 +129,8 @@ public class Controller implements MouseListener {
 			if (correctFlags(col, row)) {
 				zeroClicked(col, row);
 				if (model.hasWon()) {
+					timer.cancel();
 					view.showVictoryMsg();
-					timer.setGameStopped(true);
 				}
 			}
 			else {
@@ -175,9 +201,14 @@ public class Controller implements MouseListener {
 	}
 	
 	/**
-	 * Shows all the buttons.
+	 * Stops the timer and shows all the buttons.
 	 */
 	private void mineClicked() {
+		
+		// stop the timer
+		timer.cancel();
+		
+		// show all the buttons
 		for (int i = 0; i < model.getLength(); i++) {
 			for (int j = 0; j < model.getLength(); j++) {
 				Cell cell = model.getCells()[j][i];
@@ -214,21 +245,6 @@ public class Controller implements MouseListener {
 		    }
 		}
 		return true;
-	}
-	
-	/**
-	 * Resets the game by generating new model and setting all the mine field buttons to the
-	 * default background color and empty text. Also restarts the timer
-	 */
-	private void resetClicked() {
-		int length = model.getLength();
-		int mines = model.getMines();
-		model = new Model(length, mines);
-		view.reset();
-		// The lines below don't work right.
-	//	timer.setGameStopped(true);
-	//	timer = new Timer(model, view);
-	//	timer.run();
 	}
 	
 	// Methods from interface MouseListener that must be implemented

@@ -1,7 +1,7 @@
 package minesweeper;
 
 /**
- * An instance represents a cell in the mine field
+ * An instance represents a cell in the mine field, which is a component of the model.
  * 
  * @author Benjamin Revard
  */
@@ -15,8 +15,8 @@ public class Cell {
 		private boolean rightClicked; // Whether this cell has been right clicked
 		
 		/**
-		 * Constructor for a cell object.
-		 * Input: the column and row of this cell
+		 * Constructor: makes a new cell object with default attributes.
+		 * Input: the column and row of the cell
 		 */
 		Cell(int col, int row) {
 			this.column = col;
