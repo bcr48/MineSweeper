@@ -12,6 +12,7 @@ public class Model {
 	private int length; // The length of one side of the mine field (> 0)
 	private int mines; // The number of mines in the mine field (>= 0)
 	private int flags; // The number of flags placed by the player (>= 0)
+	private boolean isNew; // Indicates whether or not the model has just been created
 	private Cell[][] cells; // The cells that represent the mine field
 	
 	/**
@@ -24,6 +25,7 @@ public class Model {
 		this.length = length;
 		this.mines = mines;
 		flags = 0;
+		isNew = true;
 		cells = new Cell[length][length];
 		for (int i = 0; i < length; i++) {
 			for (int j = 0; j < length; j++) {
@@ -224,6 +226,15 @@ public class Model {
 	
 	public int getFlags() {
 		return flags;
+	}
+	
+	public boolean getIsNew() {
+		return isNew;
+	}
+	
+	// Setters
+	public void setIsNew(boolean status) {
+		isNew = status;
 	}
 	
 }

@@ -21,7 +21,7 @@ public class Controller implements MouseListener {
 	private Task task; // The task for the timer
 	
 	/**
-	 * Constructor: initializes new timer and task objects, and starts the timer.
+	 * Constructor: initializes new timer and task objects.
 	 * Input: a model and a view
 	 */
 	public Controller(Model model, View view) {
@@ -29,7 +29,6 @@ public class Controller implements MouseListener {
 		this.view = view;
 		task = new Task(view); 
 		timer = new Timer();
-		timer.scheduleAtFixedRate(task, 0, 1000); 
 	}
 	
 	/**
@@ -53,7 +52,7 @@ public class Controller implements MouseListener {
 	
 	/**
 	 * Resets the game by stopping the timer if needed, generating a new model, setting all the mine 
-	 * field buttons to the default background color and empty text, and making and starting a new timer.
+	 * field buttons to the default background color and empty text, and making a new timer and task.
 	 */
 	private void resetClicked() {
 		
@@ -71,7 +70,6 @@ public class Controller implements MouseListener {
 		// make and start a new timer
 		timer = new Timer();
 		task = new Task(view);
-		timer.scheduleAtFixedRate(task, 0, 1000);
 	}
 	
 	/**
@@ -79,6 +77,12 @@ public class Controller implements MouseListener {
 	 * Input: a mouse event and a button
 	 */
 	private void fieldClicked(MouseEvent e, JButton btn) {
+		
+		// Start the timer if this is the first click of the game
+		if (model.getIsNew()) {
+			timer.scheduleAtFixedRate(task, 0, 1000);
+			model.setIsNew(false);
+		}
 		
 		// Get the type of mouse click
 		boolean isLeftClick = isLeftClick(e);

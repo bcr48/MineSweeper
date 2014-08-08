@@ -163,10 +163,11 @@ public class View extends JFrame {
 	
 	/**
 	 * Sets all the buttons in the mine field to the default background color and empty text, and
-	 * sets the mine counter label to the total number of mines.
+	 * sets the mine counter label to the total number of mines and the timer laber to 0.
 	 */
 	public void reset() {
 		mineCounter.setText("  " + Integer.toString(mines) + "  ");
+		timer.setText("  0  ");
 		for (int i = 0; i < length; i++) {
 			for (int j = 0; j < length; j++) {
 				buttons[j][i].setText("");
