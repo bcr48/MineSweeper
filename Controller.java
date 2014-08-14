@@ -5,6 +5,7 @@ import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import javax.swing.*;
 import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * This is the controller of the MVC implementation of the mine sweeper game.
@@ -18,7 +19,7 @@ public class Controller implements MouseListener {
 	private Model model; // The model of this MVC implementation of mine sweeper
 	private View view; // The view of this MVC implementation of mine sweeper
 	private Timer timer; // Timer object from java.util.Timer
-	private Task task; // The task for the timer
+	private Time time; // The task for the timer
 	
 	/**
 	 * Constructor: initializes new timer and task objects.
@@ -27,8 +28,8 @@ public class Controller implements MouseListener {
 	public Controller(Model model, View view) {
 		this.model = model;
 		this.view = view;
-		task = new Task(view); 
 		timer = new Timer();
+		time = new Time(); 
 	}
 	
 	/**
@@ -69,7 +70,7 @@ public class Controller implements MouseListener {
 		
 		// make and start a new timer
 		timer = new Timer();
-		task = new Task(view);
+		time = new Time();
 	}
 	
 	/**
@@ -80,7 +81,7 @@ public class Controller implements MouseListener {
 		
 		// Start the timer if this is the first click of the game
 		if (model.getIsNew()) {
-			timer.scheduleAtFixedRate(task, 0, 1000);
+			timer.scheduleAtFixedRate(time, 0, 1000);
 			model.setIsNew(false);
 		}
 		
@@ -252,10 +253,34 @@ public class Controller implements MouseListener {
 	}
 	
 	// Methods from interface MouseListener that must be implemented
-		public void mousePressed(MouseEvent e) {};
-		public void mouseReleased(MouseEvent e) {};
-		public void mouseEntered(MouseEvent e) {};
-		public void mouseExited(MouseEvent e) {};
+	public void mousePressed(MouseEvent e) {};
+	public void mouseReleased(MouseEvent e) {};
+	public void mouseEntered(MouseEvent e) {};
+	public void mouseExited(MouseEvent e) {};
+	
+		
+	/**
+	 * An instance represents the time (in seconds) since the first click.
+	 */
+	private class Time extends TimerTask {
+		
+		private int second; // How long the game has lasted (in seconds) (>= 0)
+			
+		/**
+		 * Constructor: initializes the time to zero.
+		 */
+		public Time() {
+			second = 0;
+		}
+			
+		/**
+		 * Displays and increments the time.
+		 */
+		public void run() {
+			view.setTimer(second);
+			second++;
+		}
+	}
 	        
 }
 

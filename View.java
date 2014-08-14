@@ -147,6 +147,12 @@ public class View extends JFrame {
 		mineCounter.setText("  " + Integer.toString(counter) + "  ");
 	}
 	
+	
+	/**
+	 * Sets the value of the timer, which should be showing the number of seconds since the first click.
+	 * Input: the number to set the timer to
+	 * @param time
+	 */
 	public void setTimer(int time) {
 		timer.setText("  " + time + "  ");
 	}
