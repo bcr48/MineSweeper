@@ -3,7 +3,7 @@ import javax.swing.*;
 
 /**
  * This MineSweeper class, along with the MineSweeperController, MineSweeperView, 
- * MineSweeperModel, Cell and Task classes implement a mine sweeper game.
+ * MineSweeperModel and Cell classes implements a mine sweeper game.
  * 
  * This implementation is based on the MVC design pattern.
  * 
@@ -27,9 +27,8 @@ public class MineSweeper {
 		Model model = new Model(length, mines);
 		View view = new View(length, mines);
 		Controller controller = new Controller(model, view);
-
 		
-		// register the controller as a listener
+		// register the controller as a listener to the view
 		view.registerListener(controller);
 		
 		// start it
