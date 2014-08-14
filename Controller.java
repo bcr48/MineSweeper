@@ -9,8 +9,8 @@ import java.util.TimerTask;
 
 /**
  * This is the controller of the MVC implementation of the mine sweeper game.
- * It interprets events from the GUI and updates instances of MineSweeperModel,
- *  MineSweeperView and Task as needed.
+ * It interprets events from the GUI and updates instances of MineSweeperModel
+ * and MineSweeperView as needed.
  * 
  * @author Benjamin Revard
  */
