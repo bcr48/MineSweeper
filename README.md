@@ -1,8 +1,3 @@
-## <a id="title"></a>MineSweeper
-
-A simple implementation of the Minesweeper game.
-
-
 ### <a id="getting"></a>Getting MineSweeper
 
 Start by cloning the git repository:
