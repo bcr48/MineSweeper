@@ -87,8 +87,6 @@ public class View extends JFrame {
 	/**
 	 * Sets this button's background color to the default and this button's text to its value.
 	 * Input: the column, row, and value of the button
-	 * 
-	 * TODO: make the background color light gray for non-zero values too
 	 */
 	public void showValue(int col, int row, int value) {
 		
@@ -132,8 +130,6 @@ public class View extends JFrame {
 	/**
 	 * Adds a flag to this button by turning its background color blue.
 	 * Input: the column and row of the button
-	 * 
-	 * TODO: make this show a little flag or something, not just turn blue
 	 */
 	public void placeFlag(int col, int row) {
 		paint(col, row, Color.BLUE);
@@ -160,8 +156,6 @@ public class View extends JFrame {
 	/**
 	 * Shows that this button is a mine by turning its background color red.
 	 * Input: the column and row of the button
-	 * 
-	 * TODO: make this show a little mine or something, not just turn red
 	 */
 	public void showMine(int col, int row) {
 		paint(col, row, Color.RED);
@@ -197,7 +191,6 @@ public class View extends JFrame {
 		}
 		
 		// paint a victory message
-		// TODO: find a better way to do this
 		if (length > 18) {
 			// the Y
 			paint(2, 4, Color.GREEN);

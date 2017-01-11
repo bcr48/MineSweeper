@@ -69,7 +69,6 @@ public class Model {
 	/**
 	 * Returns an ArrayList of neighboring mine field cells.
 	 * Input: the column and row of the cell to investigate
-	 * TODO: find a better way to do this
 	 */
 	public ArrayList<Cell> getNeighbors(int col, int row) {
 		
