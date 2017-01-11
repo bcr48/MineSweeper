@@ -5,7 +5,7 @@ A simple implementation of the Minesweeper game.
 
 ### <a id="getting"></a>Getting MineSweeper
 
-Start by cloning the git repository. Move into the directory where you would like the repository to be located, and type:
+Start by cloning the git repository:
 
 ```
 git clone https://github.com/bcr48/MineSweeper.git
